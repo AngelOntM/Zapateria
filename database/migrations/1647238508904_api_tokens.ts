@@ -14,8 +14,8 @@ export default class ApiTokens extends BaseSchema {
       /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL
        */
+      table.timestamp('created_at').nullable()
       table.timestamp('expires_at').nullable()
-      table.timestamp('created_at').notNullable()
     })
   }
 

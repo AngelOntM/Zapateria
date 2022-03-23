@@ -28,7 +28,9 @@ Route.group(() => {
   Route.resource('shippers', 'ShippersController');
   Route.resource('sizes', 'SizesController');
   Route.resource('suppliers', 'SuppliersController');
+  Route.resource('users', 'UsersController');
 }).middleware('auth')
+
 
 
 import HealthCheck from '@ioc:Adonis/Core/HealthCheck'
@@ -41,11 +43,4 @@ Route.get('health', async ({ response }) => {
   return report.healthy ? response.ok(report) : response.badRequest(report)
 })
 
-Route.get('/', (response) => {
-  try {
-    return 'Hello world'
 
-  } catch {
-    return response
-  }
-})

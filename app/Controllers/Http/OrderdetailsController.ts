@@ -1,6 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema } from '@ioc:Adonis/Core/Validator'
 import Orderdetail from 'App/Models/Orderdetail'
+import Product from 'App/Models/Product';
 
 export default class OrderdetailsController {
     public async index({ response }: HttpContextContract) {
@@ -17,8 +18,10 @@ export default class OrderdetailsController {
         })
         const validatedData = await request.validate({ schema: postSchema })
         const orderdetails = await Orderdetail.create({ orderid: validatedData.orderid, productid: validatedData.productid, quantity: validatedData.quantity, unitprice: validatedData.unitprice });
+        const products = await Product.findByOrFail('productid', validatedData.productid)
+        const newstock = validatedData.quantity + products.stock
+        await products.merge({ stock: newstock }).save
         return response.json({ orderdetails });
-
     }
 
     public async show({ response, params }: HttpContextContract) {

@@ -15,6 +15,7 @@ export default class BrandsController {
     const validatedData = await request.validate({ schema: postSchema })
     const brands = await Brand.create({ name: validatedData.name });
     return response.json({ brands });
+
   }
 
   public async show({ response, params }: HttpContextContract) {

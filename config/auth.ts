@@ -19,7 +19,6 @@ import { AuthConfig } from '@ioc:Adonis/Addons/Auth'
 const authConfig: AuthConfig = {
   guard: 'api',
   guards: {
-
     api: {
       driver: 'oat',
       tokenProvider: {
@@ -28,7 +27,6 @@ const authConfig: AuthConfig = {
         table: 'api_tokens',
         foreignKey: 'user_id',
       },
-
       provider: {
         driver: 'lucid',
         identifierKey: 'id',

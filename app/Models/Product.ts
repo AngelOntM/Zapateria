@@ -1,5 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import Orderdetail from './Orderdetail'
+import Brand from './Brand'
+import Size from './Size'
+import Category from './Category'
 
 export default class Product extends BaseModel {
   @column({ isPrimary: true })
@@ -31,4 +35,24 @@ export default class Product extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @hasMany(() => Orderdetail, {
+    foreignKey: 'productid'
+  })
+  public Orderdetails: HasMany<typeof Orderdetail>
+
+  @belongsTo(() => Brand, {
+    localKey: 'brandid'
+  })
+  public Brand: BelongsTo<typeof Brand>
+
+  @belongsTo(() => Size, {
+    localKey: 'sizeid'
+  })
+  public Size: BelongsTo<typeof Size>
+
+  @belongsTo(() => Category, {
+    localKey: 'categoryid'
+  })
+  public Category: BelongsTo<typeof Category>
 }

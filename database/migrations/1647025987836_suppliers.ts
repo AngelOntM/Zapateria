@@ -8,7 +8,7 @@ export default class Suppliers extends BaseSchema {
       table.increments('supplierid')
       table.string('name').notNullable()
       table.string('email').notNullable().unique()
-      table.integer('phone')
+      table.bigInteger('phone')
       table.timestamps()
     })
   }

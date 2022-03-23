@@ -7,11 +7,7 @@ import Hash from '@ioc:Adonis/Core/Hash'
 export default class AuthController {
     public async register({ request, response }: HttpContextContract) {
         // validate email
-        const validations = await schema.create({
-            email: schema.string({}, [rules.email(), rules.unique({ table: 'users', column: 'email' })]),
-            password: schema.string({}, [rules.confirmed()]),
-        })
-        const data = await request.validate({ schema: validations })
+        const data = await request.validate({ schema: User.validarEmpleado() })
         const user = await User.create(data)
         return response.created(user)
     }
@@ -29,7 +25,9 @@ export default class AuthController {
         if (!(await Hash.verify(user.password, password))) {
             return response.badRequest('Invalid credentials')
         } else if (user.isActivated == true) {
-            const token = await (await auth.use('api').generate(user)).expiresIn
+            const token = await (await auth.use('api').generate(user, {
+                expiresIn: '30mins'
+            }))
             return token
         }
         else {
