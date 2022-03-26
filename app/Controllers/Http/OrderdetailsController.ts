@@ -1,51 +1,35 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema } from '@ioc:Adonis/Core/Validator'
 import Orderdetail from 'App/Models/Orderdetail'
-import Product from 'App/Models/Product';
 
 export default class OrderdetailsController {
     public async index({ response }: HttpContextContract) {
-        const orderdetails = await Orderdetail.query();
-        return response.json({ orderdetails })
+        const dato = await Orderdetail.ver()
+        return response.json({ dato })
     }
 
     public async store({ request, response }: HttpContextContract) {
-        const postSchema = schema.create({
-            orderid: schema.number(),
-            productid: schema.number(),
-            quantity: schema.number(),
-            unitprice: schema.number()
-        })
-        const validatedData = await request.validate({ schema: postSchema })
-        const orderdetails = await Orderdetail.create({ orderid: validatedData.orderid, productid: validatedData.productid, quantity: validatedData.quantity, unitprice: validatedData.unitprice });
-        const products = await Product.findByOrFail('productid', validatedData.productid)
-        const newstock = validatedData.quantity + products.stock
-        await products.merge({ stock: newstock }).save
-        return response.json({ orderdetails });
+        const validatedData = await Orderdetail.validar(request)
+        const dato = await Orderdetail.crear(validatedData)
+        return response.json({ dato });
     }
 
     public async show({ response, params }: HttpContextContract) {
-        const orderdetails = await Orderdetail.findByOrFail('orderdetailid', params.id);
-        return response.json({ orderdetails })
+        const dato = await Orderdetail.verUno(params.id)
+        return response.json({ dato })
     }
 
     public async update({ request, response, params }: HttpContextContract) {
-        const postSchema = schema.create({
-            orderid: schema.number(),
-            productid: schema.number(),
-            quantity: schema.number(),
-            unitprice: schema.number()
-        })
-        const validatedData = await request.validate({ schema: postSchema })
-        const orderdetails = await Orderdetail.findByOrFail('orderdetailid', params.id)
-        orderdetails.merge(validatedData)
-        await orderdetails.save()
-        return response.json({ orderdetails })
+        const validatedData = await Orderdetail.validar(request)
+        const registro = await Orderdetail.verUno(params.id)
+        const dato = await Orderdetail.modificar(validatedData, registro)
+        return response.json({ dato })
     }
 
     public async destroy({ response, params }: HttpContextContract) {
-        const orderdetails = await Orderdetail.findByOrFail('orderdetailid', params.id)
-        await orderdetails.delete()
-        return response.json({ orderdetails })
+        const dato = await Orderdetail.verUno(params.id)
+        await Orderdetail.eliminar(dato)
+        return response
+            .status(200)
+            .send({ message: 'Registro Eliminado' })
     }
 }

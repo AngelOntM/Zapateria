@@ -53,7 +53,6 @@ export default class Users extends BaseModel {
       email: schema.string({}, [rules.email()]),
       password: schema.string()
     })
-
     return postSchema
   }
 
@@ -89,5 +88,14 @@ export default class Users extends BaseModel {
         return null
 
     }
+  }
+
+  public static crear(data) {
+    const user = this.create(data)
+    return user
+  }
+
+  public static actualizar(id, data) {
+
   }
 }

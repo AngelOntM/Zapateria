@@ -28,7 +28,11 @@ export default class AuthController {
             const token = await (await auth.use('api').generate(user, {
                 expiresIn: '30mins'
             }))
-            return token
+            const data = {
+                token: token,
+                userLevel: user.accessid
+            }
+            return data
         }
         else {
             return response

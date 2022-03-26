@@ -1,41 +1,35 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema } from '@ioc:Adonis/Core/Validator'
 import Category from 'App/Models/Category'
 
 export default class CategoriesController {
     public async index({ response }: HttpContextContract) {
-        const categories = await Category.query();
-        return response.json({ categories })
+        const dato = await Category.ver()
+        return response.json({ dato })
     }
 
     public async store({ request, response }: HttpContextContract) {
-        const postSchema = schema.create({
-            name: schema.string()
-        })
-        const validatedData = await request.validate({ schema: postSchema })
-        const categories = await Category.create({ name: validatedData.name });
-        return response.json({ categories });
+        const validatedData = await Category.validar(request)
+        const dato = await Category.crear(validatedData)
+        return response.json({ dato });
     }
 
     public async show({ response, params }: HttpContextContract) {
-        const categories = await Category.findByOrFail('categoryid', params.id);
-        return response.json({ categories })
+        const dato = await Category.verUno(params.id)
+        return response.json({ dato })
     }
 
     public async update({ request, response, params }: HttpContextContract) {
-        const postSchema = schema.create({
-            name: schema.string()
-        })
-        const validatedData = await request.validate({ schema: postSchema })
-        const categories = await Category.findByOrFail('categoryid', params.id)
-        categories.merge(validatedData)
-        await categories.save()
-        return response.json({ categories })
+        const validatedData = await Category.validar(request)
+        const registro = await Category.verUno(params.id)
+        const dato = await Category.modificar(validatedData, registro)
+        return response.json({ dato })
     }
 
     public async destroy({ response, params }: HttpContextContract) {
-        const categories = await Category.findByOrFail('categoryid', params.id)
-        await categories.delete()
-        return response.json({ categories })
+        const dato = await Category.verUno(params.id)
+        await Category.eliminar(dato)
+        return response
+            .status(200)
+            .send({ message: 'Registro Eliminado' })
     }
 }

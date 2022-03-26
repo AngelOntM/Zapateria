@@ -17,7 +17,7 @@ export default class UsersController {
     public async store({ auth, request, response }: HttpContextContract) {
         if (auth.user?.accessid == 1) {
             const validatedData = await request.validate({ schema: User.validarAdmin() })
-            const users = await User.create(validatedData);
+            const users = await User.crear(validatedData);
             return response.json({ users });
         }
         else {

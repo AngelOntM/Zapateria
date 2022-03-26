@@ -6,7 +6,7 @@ export default class Sizes extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('sizeid')
-      table.decimal("size").notNullable()
+      table.decimal("size").notNullable().unique()
       table.timestamps()
     })
   }

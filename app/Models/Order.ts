@@ -3,6 +3,8 @@ import { BaseModel, BelongsTo, belongsTo, column, HasMany, hasMany } from '@ioc:
 import Supplier from './Supplier'
 import Shipper from './Shipper'
 import Orderdetail from './Orderdetail'
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
+
 
 export default class Order extends BaseModel {
   @column({ isPrimary: true })
@@ -34,4 +36,37 @@ export default class Order extends BaseModel {
     foreignKey: 'orderid'
   })
   public orderdetails: HasMany<typeof Orderdetail>
+
+
+  public static ver() {
+    return this.query()
+  }
+
+  public static verUno(id) {
+    return this.findByOrFail('brandid', id)
+  }
+
+  public static crear(data) {
+    return this.create(data)
+  }
+
+  public static schema() {
+    const postSchema = schema.create({
+      supplierid: schema.number(),
+      shipperid: schema.number(),
+    })
+    return postSchema
+  }
+
+  public static validar(data) {
+    return data.validate({ schema: this.schema() })
+  }
+
+  public static eliminar(dato) {
+    return dato.delete()
+  }
+
+  public static modificar(data, registro) {
+    return registro.merge(data).save()
+  }
 }
