@@ -13,7 +13,7 @@ export default class Product extends BaseModel {
   public productid: number
 
   @column()
-  public name: string
+  public product: string
 
   @column()
   public color: string
@@ -32,6 +32,15 @@ export default class Product extends BaseModel {
 
   @column()
   public categoryid: number
+
+  @column()
+  public size: string
+
+  @column()
+  public brand: string
+
+  @column()
+  public category: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -64,26 +73,11 @@ export default class Product extends BaseModel {
   }
 
   public static verProductos() {
-    return Database.from('products')
+    return this.query()
+      .innerJoin('sizes', 'sizes.sizeid', 'products.sizeid')
+      .innerJoin('categories', 'categories.categoryid', 'products.categoryid')
+      .innerJoin('brands', 'brands.brandid', 'products.brandid')
       .select('*')
-      .select(
-        Database.from('sizes')
-          .select('sizes.size')
-          .whereColumn('sizeid', 'sizes.sizeid')
-          .as('size')
-      )
-      .select(
-        Database.from('categories')
-          .select('categories.name')
-          .whereColumn('categoryid', 'categories.categoryid')
-          .as('category')
-      )
-      .select(
-        Database.from('brands')
-          .select('brands.name')
-          .whereColumn('brandid', 'brands.brandid')
-          .as('brand')
-      )
   }
 
   public static verUno(id) {
@@ -91,26 +85,11 @@ export default class Product extends BaseModel {
   }
 
   public static verProductosUno(id) {
-    return Database.from('products')
+    return this.query()
+      .innerJoin('sizes', 'sizes.sizeid', 'products.sizeid')
+      .innerJoin('categories', 'categories.categoryid', 'products.categoryid')
+      .innerJoin('brands', 'brands.brandid', 'products.brandid')
       .select('*')
-      .select(
-        Database.from('sizes')
-          .select('sizes.size')
-          .whereColumn('sizeid', 'sizes.sizeid')
-          .as('size')
-      )
-      .select(
-        Database.from('categories')
-          .select('categories.name')
-          .whereColumn('categoryid', 'categories.categoryid')
-          .as('category')
-      )
-      .select(
-        Database.from('brands')
-          .select('brands.name')
-          .whereColumn('brandid', 'brands.brandid')
-          .as('brand')
-      )
       .where('productid', id)
   }
 
@@ -120,7 +99,7 @@ export default class Product extends BaseModel {
 
   public static schema() {
     const postSchema = schema.create({
-      name: schema.string(),
+      product: schema.string(),
       color: schema.string(),
       stock: schema.number(),
       price: schema.number(),

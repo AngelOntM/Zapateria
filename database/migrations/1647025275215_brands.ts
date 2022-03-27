@@ -6,7 +6,7 @@ export default class Brands extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('brandid')
-      table.string("name").notNullable().unique()
+      table.string("brand").notNullable().unique()
       table.timestamps()
     })
   }

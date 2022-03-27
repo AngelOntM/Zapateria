@@ -9,7 +9,7 @@ export default class Brand extends BaseModel {
   public brandid: number
 
   @column()
-  public name: string
+  public brand: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -36,7 +36,7 @@ export default class Brand extends BaseModel {
 
   public static schema() {
     const postSchema = schema.create({
-      name: schema.string({}, [rules.unique({ table: 'brands', column: 'name' })])
+      brand: schema.string({}, [rules.unique({ table: 'brands', column: 'brand' })])
     })
     return postSchema
   }

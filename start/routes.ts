@@ -29,6 +29,7 @@ Route.group(() => {
   Route.resource('sizes', 'SizesController');
   Route.resource('suppliers', 'SuppliersController');
   Route.resource('users', 'UsersController');
+  Route.resource('carrito', 'CarritosController');
   Route.get('tableproducts', 'ProductsController.indexProductos')
   Route.get('tableproducts/:id', 'ProductsController.showProductos')
   Route.get('tableorders', 'OrdersController.indexOrders')

@@ -9,7 +9,7 @@ export default class Category extends BaseModel {
   public categoryid: number
 
   @column()
-  public name: string
+  public category: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -36,7 +36,7 @@ export default class Category extends BaseModel {
 
   public static schema() {
     const postSchema = schema.create({
-      name: schema.string({}, [rules.unique({ table: 'categories', column: 'name' })])
+      category: schema.string({}, [rules.unique({ table: 'categories', column: 'category' })])
     })
     return postSchema
   }

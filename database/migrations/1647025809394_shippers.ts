@@ -6,7 +6,7 @@ export default class Shippers extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('shipperid')
-      table.string('name').notNullable().unique()
+      table.string('shipper').notNullable().unique()
       table.bigInteger('phone')
       table.timestamps()
     })

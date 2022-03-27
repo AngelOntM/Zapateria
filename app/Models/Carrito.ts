@@ -1,22 +1,15 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, BelongsTo, column } from '@ioc:Adonis/Lucid/Orm'
-import Order from './Order'
-import Product from './Product'
+import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 import { schema } from '@ioc:Adonis/Core/Validator'
+const { Schema } = require('mongoose')
 
 
-export default class Orderdetail extends BaseModel {
+export default class Carrito extends BaseModel {
   @column({ isPrimary: true })
-  public orderdetailid: number
-
-  @column()
-  public orderid: number
+  public carritoid: number
 
   @column()
   public productid: number
-
-  @column()
-  public product: string
 
   @column()
   public quantity: number
@@ -24,22 +17,14 @@ export default class Orderdetail extends BaseModel {
   @column()
   public unitprice: number
 
+  @column()
+  public userid: number
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
-
-  @belongsTo(() => Order, {
-    localKey: 'orderid'
-  })
-  public orders: BelongsTo<typeof Order>
-
-  @belongsTo(() => Product, {
-    localKey: 'productid'
-  })
-  public products: BelongsTo<typeof Product>
-
 
   public static ver() {
     return this.query()
@@ -54,13 +39,13 @@ export default class Orderdetail extends BaseModel {
   }
 
   public static schema() {
-    const postSchema = schema.create({
-      orderid: schema.number(),
-      productid: schema.number(),
-      quantity: schema.number(),
-      unitprice: schema.number()
+    const postSchema = new Schema({
+      orderid: Number,
+      productid: Number,
+      quantity: Number,
+      userid: Number
     })
-    return postSchema
+    postSchema
   }
 
   public static validar(data) {
@@ -85,11 +70,5 @@ export default class Orderdetail extends BaseModel {
     product.stock = product.stock - nq
     return product
   }
-
-  public static verOrders() {
-    return this.query()
-      .innerJoin('products', 'products.productid', 'orderdetails.productid')
-      .select('*')
-
-  }
 }
+

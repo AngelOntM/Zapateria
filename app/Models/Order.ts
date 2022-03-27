@@ -4,7 +4,6 @@ import Supplier from './Supplier'
 import Shipper from './Shipper'
 import Orderdetail from './Orderdetail'
 import { schema } from '@ioc:Adonis/Core/Validator'
-import Database from '@ioc:Adonis/Lucid/Database'
 
 
 export default class Order extends BaseModel {
@@ -16,6 +15,12 @@ export default class Order extends BaseModel {
 
   @column()
   public shipperid: number
+
+  @column()
+  public supplier: string
+
+  @column()
+  public shipper: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -72,37 +77,18 @@ export default class Order extends BaseModel {
   }
 
   public static verOrders() {
-    return Database.from('orders')
+    return this.query()
+      .innerJoin('suppliers', 'suppliers.supplierid', 'orders.supplierid')
+      .innerJoin('shippers', 'shippers.shipperid', 'orders.shipperid')
       .select('*')
-      .select(
-        Database.from('suppliers')
-          .select('suppliers.name')
-          .whereColumn('supplierid', 'suppliers.supplierid')
-          .as('supplier')
-      )
-      .select(
-        Database.from('shippers')
-          .select('shippers.name')
-          .whereColumn('shipperid', 'shippers.shipperid')
-          .as('shipper')
-      )
+
   }
 
   public static verOrdersUno(id) {
-    return Database.from('orders')
+    return this.query()
+      .innerJoin('suppliers', 'suppliers.supplierid', 'orders.supplierid')
+      .innerJoin('shippers', 'shippers.shipperid', 'orders.shipperid')
       .select('*')
-      .select(
-        Database.from('suppliers')
-          .select('suppliers.name')
-          .whereColumn('supplierid', 'suppliers.supplierid')
-          .as('supplier')
-      )
-      .select(
-        Database.from('shippers')
-          .select('shippers.name')
-          .whereColumn('shipperid', 'shippers.shipperid')
-          .as('shipper')
-      )
       .where('orderid', id)
   }
 }

@@ -6,7 +6,7 @@ export default class Suppliers extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('supplierid')
-      table.string('name').notNullable().unique()
+      table.string('supplier').notNullable().unique()
       table.string('email').notNullable().unique()
       table.bigInteger('phone')
       table.timestamps()

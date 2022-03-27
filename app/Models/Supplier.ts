@@ -9,7 +9,7 @@ export default class Supplier extends BaseModel {
   public supplierid: number
 
   @column()
-  public name: string
+  public supplier: string
 
   @column()
   public email: string
@@ -46,7 +46,7 @@ export default class Supplier extends BaseModel {
 
   public static schema() {
     const postSchema = schema.create({
-      name: schema.string({}, [rules.unique({ table: 'suppliers', column: 'name' })]),
+      supplier: schema.string({}, [rules.unique({ table: 'suppliers', column: 'supplier' })]),
       email: schema.string({}, [rules.unique({ table: 'suppliers', column: 'email' })]),
       phone: schema.number()
     })

@@ -6,7 +6,7 @@ export default class Categories extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('categoryid')
-      table.string('name').notNullable().unique()
+      table.string('category').notNullable().unique()
       table.timestamps()
     })
   }
