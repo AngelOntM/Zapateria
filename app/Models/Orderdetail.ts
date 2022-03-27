@@ -3,6 +3,7 @@ import { BaseModel, belongsTo, BelongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Order from './Order'
 import Product from './Product'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import Database from '@ioc:Adonis/Lucid/Database'
 
 
 export default class Orderdetail extends BaseModel {
@@ -44,7 +45,7 @@ export default class Orderdetail extends BaseModel {
   }
 
   public static verUno(id) {
-    return this.findByOrFail('brandid', id)
+    return this.findByOrFail('orderdetailid', id)
   }
 
   public static crear(data) {
@@ -71,5 +72,33 @@ export default class Orderdetail extends BaseModel {
 
   public static modificar(data, registro) {
     return registro.merge(data).save()
+  }
+
+  public static modificarProducto(id, quantity) {
+    const producto = Product.verUno(id)
+    console.log('producto', producto)
+  }
+
+  public static crearStock(quantity, product) {
+    product.stock = product.stock + quantity
+    return product
+  }
+
+  public static modificarStock(quantity, newquantity, product) {
+    const nq = quantity - newquantity
+    product.stock = product.stock - nq
+    return product
+  }
+
+  public static verOrders() {
+    return Database.from('orderdetails')
+      .select('*')
+      .select(
+        Database.from('products')
+          .select('products.name')
+          .whereColumn('productid', 'products.productid')
+          .as('product')
+      )
+
   }
 }

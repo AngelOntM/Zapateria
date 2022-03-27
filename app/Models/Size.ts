@@ -28,7 +28,7 @@ export default class Size extends BaseModel {
   }
 
   public static verUno(id) {
-    return this.findByOrFail('brandid', id)
+    return this.findByOrFail('sizeid', id)
   }
 
   public static crear(data) {

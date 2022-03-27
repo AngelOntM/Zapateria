@@ -27,7 +27,7 @@ export default class Category extends BaseModel {
   }
 
   public static verUno(id) {
-    return this.findByOrFail('brandid', id)
+    return this.findByOrFail('categoryid', id)
   }
 
   public static crear(data) {

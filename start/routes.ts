@@ -29,9 +29,12 @@ Route.group(() => {
   Route.resource('sizes', 'SizesController');
   Route.resource('suppliers', 'SuppliersController');
   Route.resource('users', 'UsersController');
+  Route.get('tableproducts', 'ProductsController.indexProductos')
+  Route.get('tableproducts/:id', 'ProductsController.showProductos')
+  Route.get('tableorders', 'OrdersController.indexOrders')
+  Route.get('tableorders/:id', 'OrdersController.showOrders')
+  Route.get('tableorderdetails', 'OrderdetailsController.indexOrderdetails')
 }).middleware('auth')
-
-
 
 import HealthCheck from '@ioc:Adonis/Core/HealthCheck'
 import './routes/users.ts'

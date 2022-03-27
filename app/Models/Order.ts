@@ -4,6 +4,7 @@ import Supplier from './Supplier'
 import Shipper from './Shipper'
 import Orderdetail from './Orderdetail'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import Database from '@ioc:Adonis/Lucid/Database'
 
 
 export default class Order extends BaseModel {
@@ -43,7 +44,7 @@ export default class Order extends BaseModel {
   }
 
   public static verUno(id) {
-    return this.findByOrFail('brandid', id)
+    return this.findByOrFail('orderid', id)
   }
 
   public static crear(data) {
@@ -68,5 +69,40 @@ export default class Order extends BaseModel {
 
   public static modificar(data, registro) {
     return registro.merge(data).save()
+  }
+
+  public static verOrders() {
+    return Database.from('orders')
+      .select('*')
+      .select(
+        Database.from('suppliers')
+          .select('suppliers.name')
+          .whereColumn('supplierid', 'suppliers.supplierid')
+          .as('supplier')
+      )
+      .select(
+        Database.from('shippers')
+          .select('shippers.name')
+          .whereColumn('shipperid', 'shippers.shipperid')
+          .as('shipper')
+      )
+  }
+
+  public static verOrdersUno(id) {
+    return Database.from('orders')
+      .select('*')
+      .select(
+        Database.from('suppliers')
+          .select('suppliers.name')
+          .whereColumn('supplierid', 'suppliers.supplierid')
+          .as('supplier')
+      )
+      .select(
+        Database.from('shippers')
+          .select('shippers.name')
+          .whereColumn('shipperid', 'shippers.shipperid')
+          .as('shipper')
+      )
+      .where('orderid', id)
   }
 }

@@ -59,8 +59,11 @@ export default class Product extends BaseModel {
   })
   public Category: BelongsTo<typeof Category>
 
-
   public static ver() {
+    return this.query()
+  }
+
+  public static verProductos() {
     return Database.from('products')
       .select('*')
       .select(
@@ -84,6 +87,10 @@ export default class Product extends BaseModel {
   }
 
   public static verUno(id) {
+    return this.findByOrFail('productid', id)
+  }
+
+  public static verProductosUno(id) {
     return Database.from('products')
       .select('*')
       .select(

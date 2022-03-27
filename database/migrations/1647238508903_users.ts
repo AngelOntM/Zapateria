@@ -15,7 +15,7 @@ export default class UsersSchema extends BaseSchema {
         .unsigned()
         .references('accesses.accessid')
         .onDelete('CASCADE')
-        .defaultTo('2')
+        .defaultTo('3')
       table.timestamps()
     })
   }

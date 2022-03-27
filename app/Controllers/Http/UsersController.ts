@@ -5,7 +5,7 @@ import User from 'App/Models/Users'
 export default class UsersController {
     public async index({ auth, response }: HttpContextContract) {
         if (auth.user?.accessid == 1) {
-            const users = await User.query();
+            const users = await User.ver();
             return response.json({ users })
         } else {
             return response

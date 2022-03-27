@@ -37,7 +37,7 @@ export default class Supplier extends BaseModel {
   }
 
   public static verUno(id) {
-    return this.findByOrFail('brandid', id)
+    return this.findByOrFail('supplierid', id)
   }
 
   public static crear(data) {
@@ -46,8 +46,8 @@ export default class Supplier extends BaseModel {
 
   public static schema() {
     const postSchema = schema.create({
-      name: schema.string({}, [rules.unique({ table: 'shippers', column: 'name' })]),
-      email: schema.string({}, [rules.unique({ table: 'shippers', column: 'email' })]),
+      name: schema.string({}, [rules.unique({ table: 'suppliers', column: 'name' })]),
+      email: schema.string({}, [rules.unique({ table: 'suppliers', column: 'email' })]),
       phone: schema.number()
     })
     return postSchema

@@ -10,6 +10,9 @@ export default class AccessSeeder extends BaseSeeder {
       },
       {
         name: 'empleado',
+      },
+      {
+        name: 'cliente',
       }
     ])
   }

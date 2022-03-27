@@ -26,7 +26,7 @@ export default class AuthController {
             return response.badRequest('Invalid credentials')
         } else if (user.isActivated == true) {
             const token = await (await auth.use('api').generate(user, {
-                expiresIn: '30mins'
+                expiresIn: '24hours'
             }))
             const data = {
                 token: token,

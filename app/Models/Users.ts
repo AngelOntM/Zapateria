@@ -1,7 +1,6 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { column, beforeSave, BaseModel, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
-import Schema from '@ioc:Adonis/Lucid/Schema'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import Database from '@ioc:Adonis/Lucid/Database'
 
@@ -23,7 +22,7 @@ export default class Users extends BaseModel {
   public isActivated: boolean = true
 
   @column()
-  public accessid: number = 2
+  public accessid: number = 3
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -70,7 +69,7 @@ export default class Users extends BaseModel {
       } catch (e) {
         return e
       }
-    } else if (nivel == 2) {
+    } else if (nivel == 2 || nivel == 3) {
       const validatedData = request.validate({ schema: this.validarEmpleado() })
       return validatedData
     }
@@ -80,7 +79,7 @@ export default class Users extends BaseModel {
     if (nivel == 1) {
       const users = Database.from('users').where('id', idB);
       return users
-    } else if (nivel == 2) {
+    } else if (nivel == 2 || nivel == 3) {
       if (idO == idB) {
         const users = Database.from('users').where('id', idB);
         return users
@@ -91,11 +90,22 @@ export default class Users extends BaseModel {
   }
 
   public static crear(data) {
-    const user = this.create(data)
-    return user
+    return this.create(data)
   }
 
   public static actualizar(id, data) {
 
+  }
+
+  public static ver() {
+    return this.query()
+  }
+
+  public static eliminar(dato) {
+    return dato.delete()
+  }
+
+  public static modificar(data, registro) {
+    return registro.merge(data).save()
   }
 }

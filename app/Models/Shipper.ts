@@ -34,7 +34,7 @@ export default class Shipper extends BaseModel {
   }
 
   public static verUno(id) {
-    return this.findByOrFail('brandid', id)
+    return this.findByOrFail('shipperid', id)
   }
 
   public static crear(data) {
