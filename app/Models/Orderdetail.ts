@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, BelongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Order from './Order'
 import Product from './Product'
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import { schema } from '@ioc:Adonis/Core/Validator'
 import Database from '@ioc:Adonis/Lucid/Database'
 
 
@@ -72,11 +72,6 @@ export default class Orderdetail extends BaseModel {
 
   public static modificar(data, registro) {
     return registro.merge(data).save()
-  }
-
-  public static modificarProducto(id, quantity) {
-    const producto = Product.verUno(id)
-    console.log('producto', producto)
   }
 
   public static crearStock(quantity, product) {

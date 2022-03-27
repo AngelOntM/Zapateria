@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { column, beforeSave, BaseModel, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
+import { column, beforeSave, BaseModel } from '@ioc:Adonis/Lucid/Orm'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import Database from '@ioc:Adonis/Lucid/Database'
 
@@ -91,10 +91,6 @@ export default class Users extends BaseModel {
 
   public static crear(data) {
     return this.create(data)
-  }
-
-  public static actualizar(id, data) {
-
   }
 
   public static ver() {
