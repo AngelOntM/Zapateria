@@ -7,11 +7,11 @@ mongoose.connect('mongodb+srv://admin:admin@proyectoventas.kvfl7.mongodb.net/zap
 const carros = new Schema({
   userid: Number,
   productid: Number,
+  product: String,
   quantity: Number,
   unitprice: Number
 });
 const carrito = mongoose.model('carritos', carros)
-console.log(carrito)
 
 export default class CarritosController {
   public async index({ response }: HttpContextContract) {
@@ -22,9 +22,11 @@ export default class CarritosController {
 
   public async store({ auth, request, response }: HttpContextContract) {
     const validatedData = await Carrito.validar(request)
+    const buscar = await Product.verUno(validatedData.productid)
     var dato = await new carrito({
       userid: auth.user?.id,
       productid: validatedData.productid,
+      product: buscar.product,
       quantity: validatedData.quantity,
       unitprice: validatedData.unitprice
     });
