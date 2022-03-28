@@ -1,25 +1,55 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Carrito from 'App/Models/Carrito';
+import Product from 'App/Models/Product';
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
+mongoose.connect('mongodb+srv://admin:admin@proyectoventas.kvfl7.mongodb.net/zapateria?retryWrites=true&w=majority');
+
+const carros = new Schema({
+  userid: Number,
+  productid: Number,
+  quantity: Number,
+  unitprice: Number
+});
+const carrito = mongoose.model('carritos', carros)
 
 export default class CarritosController {
-  public async index({ auth }: HttpContextContract) {
-
+  public async index({ response }: HttpContextContract) {
+    await carrito.find()
+    return response.json({ carrito })
   }
 
-  public async create({ auth, request, response }: HttpContextContract) {
-    const mongoose = require('mongoose');
-    await mongoose.connect('mongodb+srv://admin:admin@sandbox.a6qqr.mongodb.net/zapateria?retryWrites=true&w=majority');
-    const validar = await Carrito.validar(request)
-    return mongoose
+  public async store({ auth, request, response }: HttpContextContract) {
+    const validatedData = await Carrito.validar(request)
+    var dato = await new carrito({
+      userid: auth.user?.id,
+      productid: validatedData.productid,
+      quantity: validatedData.quantity,
+      unitprice: validatedData.unitprice
+    });
+    console.log(dato.productid)
+    const registro = await Product.verUno(dato.productid)
+    const dato1 = await Carrito.crearStock(dato.quantity, registro)
+    if (dato1.stock >= 0) {
+      await Product.modificar(dato1, registro)
+      await dato.save()
+      return response.json({ dato })
+    } else {
+      return response
+        .status(400)
+        .send({ error: { message: 'Insufficient Stock' } })
+    }
   }
 
-  public async store({ }: HttpContextContract) { }
+  public async update({ response, params }: HttpContextContract) {
+    await carrito.deleteMany({ 'id': params.id })
+    return response.json({ carrito })
+  }
 
-  public async show({ }: HttpContextContract) { }
-
-  public async edit({ }: HttpContextContract) { }
-
-  public async update({ }: HttpContextContract) { }
-
-  public async destroy({ }: HttpContextContract) { }
+  public async destroy({ response, params }: HttpContextContract) {
+    await carrito.deleteOne({ '_id': params.id })
+    return response
+      .status(200)
+      .send({ message: 'Registro Eliminado' })
+  }
 }

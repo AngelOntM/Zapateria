@@ -1,7 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 import { schema } from '@ioc:Adonis/Core/Validator'
-const { Schema } = require('mongoose')
 
 
 export default class Carrito extends BaseModel {
@@ -30,22 +29,14 @@ export default class Carrito extends BaseModel {
     return this.query()
   }
 
-  public static verUno(id) {
-    return this.findByOrFail('orderdetailid', id)
-  }
-
-  public static crear(data) {
-    return this.create(data)
-  }
-
   public static schema() {
-    const postSchema = new Schema({
-      orderid: Number,
-      productid: Number,
-      quantity: Number,
-      userid: Number
+    const postSchema = schema.create({
+      userid: schema.number(),
+      productid: schema.number(),
+      quantity: schema.number(),
+      unitprice: schema.number()
     })
-    postSchema
+    return postSchema
   }
 
   public static validar(data) {
@@ -61,7 +52,7 @@ export default class Carrito extends BaseModel {
   }
 
   public static crearStock(quantity, product) {
-    product.stock = product.stock + quantity
+    product.stock = product.stock - quantity
     return product
   }
 
@@ -70,5 +61,7 @@ export default class Carrito extends BaseModel {
     product.stock = product.stock - nq
     return product
   }
+
+
 }
 
