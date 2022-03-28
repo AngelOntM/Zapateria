@@ -81,7 +81,9 @@ export default class Order extends BaseModel {
       .innerJoin('suppliers', 'suppliers.supplierid', 'orders.supplierid')
       .innerJoin('shippers', 'shippers.shipperid', 'orders.shipperid')
       .select('*')
-
+      .preload('orderdetails', (query) => {
+        query.innerJoin('products', 'products.productid', 'orderdetails.productid')
+      })
   }
 
   public static verOrdersUno(id) {
@@ -90,5 +92,8 @@ export default class Order extends BaseModel {
       .innerJoin('shippers', 'shippers.shipperid', 'orders.shipperid')
       .select('*')
       .where('orderid', id)
+      .preload('orderdetails', (query) => {
+        query.innerJoin('products', 'products.productid', 'orderdetails.productid')
+      })
   }
 }
