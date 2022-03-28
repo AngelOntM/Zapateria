@@ -15,8 +15,12 @@ const carrito = mongoose.model('carritos', carros)
 
 export default class CarritosController {
   public async index({ response }: HttpContextContract) {
-    console.log(response)
     const find = await carrito.find()
+    return response.json({ find })
+  }
+
+  public async show({ response, params }: HttpContextContract) {
+    const find = await carrito.find({ 'userid': params.id })
     return response.json({ find })
   }
 
