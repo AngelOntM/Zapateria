@@ -4,7 +4,6 @@ import Product from 'App/Models/Product';
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 mongoose.connect('mongodb+srv://admin:admin@proyectoventas.kvfl7.mongodb.net/zapateria?retryWrites=true&w=majority');
-
 const carros = new Schema({
   userid: Number,
   productid: Number,
@@ -12,11 +11,13 @@ const carros = new Schema({
   unitprice: Number
 });
 const carrito = mongoose.model('carritos', carros)
+console.log(carrito)
 
 export default class CarritosController {
   public async index({ response }: HttpContextContract) {
-    await carrito.find()
-    return response.json({ carrito })
+    console.log(response)
+    const find = await carrito.find()
+    return response.json({ find })
   }
 
   public async store({ auth, request, response }: HttpContextContract) {
@@ -47,9 +48,15 @@ export default class CarritosController {
   }
 
   public async destroy({ response, params }: HttpContextContract) {
+    const dato = await carrito.findOne({ '_id': params.id })
+    const registro = await Product.verUno(dato.productid)
     await carrito.deleteOne({ '_id': params.id })
+    const dato1 = await Carrito.regresarStock(dato.quantity, registro)
+    await Product.modificar(dato1, registro)
+    await dato.save()
     return response
       .status(200)
       .send({ message: 'Registro Eliminado' })
+
   }
 }

@@ -56,9 +56,8 @@ export default class Carrito extends BaseModel {
     return product
   }
 
-  public static modificarStock(quantity, newquantity, product) {
-    const nq = quantity - newquantity
-    product.stock = product.stock - nq
+  public static regresarStock(quantity, product) {
+    product.stock = product.stock + quantity
     return product
   }
 
