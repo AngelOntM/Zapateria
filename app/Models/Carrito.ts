@@ -31,7 +31,6 @@ export default class Carrito extends BaseModel {
 
   public static schema() {
     const postSchema = schema.create({
-      userid: schema.number(),
       productid: schema.number(),
       quantity: schema.number(),
       unitprice: schema.number()

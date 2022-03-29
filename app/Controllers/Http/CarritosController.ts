@@ -34,7 +34,6 @@ export default class CarritosController {
       quantity: validatedData.quantity,
       unitprice: validatedData.unitprice
     });
-    console.log(dato.productid)
     const registro = await Product.verUno(dato.productid)
     const dato1 = await Carrito.crearStock(dato.quantity, registro)
     if (dato1.stock >= 0) {
@@ -63,6 +62,5 @@ export default class CarritosController {
     return response
       .status(200)
       .send({ message: 'Registro Eliminado' })
-
   }
 }
